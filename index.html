@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AKV PCB Designs – PCB Designer & Electronics Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#3b82f6;--blue-dark:#2563eb;--green:#22c55e;
+  --dark:#0f172a;--dark2:#1e293b;--gray:#64748b;
+  --light:#f8fafc;--border:#e2e8f0;--text:#1e293b;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;color:var(--text);background:#fff}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  background:rgba(255,255,255,0.97);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 2rem;height:64px;
+}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-icon{
+  width:38px;height:38px;background:var(--blue);border-radius:9px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.logo-icon svg{width:22px;height:22px}
+.logo-text{font-size:1.05rem;font-weight:800;color:var(--text);white-space:nowrap}
+.logo-text span{color:var(--blue)}
+.nav-links{display:flex;gap:1.75rem;list-style:none}
+.nav-links a{
+  text-decoration:none;color:var(--gray);font-size:0.9rem;font-weight:500;
+  padding:4px 0;border-bottom:2px solid transparent;transition:all .2s;
+}
+.nav-links a:hover,.nav-links a.active{color:var(--blue);border-bottom-color:var(--blue)}
+.nav-cta{
+  background:var(--blue);color:#fff;border:none;border-radius:9px;
+  padding:9px 22px;font-size:0.9rem;font-weight:700;cursor:pointer;
+  text-decoration:none;transition:background .2s;white-space:nowrap;
+}
+.nav-cta:hover{background:var(--blue-dark)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px}
+.hamburger span{width:24px;height:2px;background:var(--text);border-radius:2px;display:block;transition:.3s}
+.mobile-menu{
+  display:none;position:fixed;top:64px;left:0;right:0;background:#fff;
+  border-bottom:1px solid var(--border);padding:1.5rem 2rem;z-index:199;
+  flex-direction:column;gap:1rem;
+}
+.mobile-menu a{text-decoration:none;color:var(--text);font-weight:600;font-size:1rem}
+.mobile-menu.open{display:flex}
+
+/* SECTIONS */
+section{padding:80px 0}
+.container{max-width:1200px;margin:0 auto;padding:0 2rem}
+.section-header{text-align:center;margin-bottom:3rem}
+.section-label{
+  display:inline-block;color:var(--blue);font-size:.8rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;margin-bottom:.75rem;
+}
+.section-header h2{font-size:2rem;font-weight:800;margin-bottom:.5rem}
+.section-header p{color:var(--gray);font-size:1rem;max-width:520px;margin:0 auto;line-height:1.7}
+
+/* ═══ HOME ═══ */
+#home{
+  padding-top:130px;padding-bottom:60px;
+  background:linear-gradient(175deg,#fff 0%,#f0f9ff 55%,#dbeafe 100%);
+  min-height:100vh;
+}
+.hero-inner{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:#dbeafe;color:var(--blue-dark);border-radius:999px;
+  padding:6px 16px;font-size:.8rem;font-weight:700;margin-bottom:1.5rem;
+}
+.badge-dot{width:8px;height:8px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.hero h1{font-size:clamp(2rem,4vw,3.2rem);font-weight:800;line-height:1.15;margin-bottom:1rem}
+.hero h1 .blue{color:var(--blue)}
+.hero > p,.hero-left > p{font-size:1.05rem;color:var(--gray);line-height:1.75;margin-bottom:2rem;max-width:520px}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:2.5rem}
+.btn-primary{
+  background:var(--blue);color:#fff;border:none;border-radius:10px;
+  padding:13px 26px;font-size:.95rem;font-weight:700;cursor:pointer;
+  text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .2s;
+}
+.btn-primary:hover{background:var(--blue-dark);transform:translateY(-2px)}
+.btn-outline{
+  background:transparent;color:var(--text);border:2px solid var(--border);
+  border-radius:10px;padding:11px 26px;font-size:.95rem;font-weight:700;
+  cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .2s;
+}
+.btn-outline:hover{border-color:var(--blue);color:var(--blue)}
+.hero-stats{display:flex;gap:2.5rem;flex-wrap:wrap}
+.stat .num{font-size:1.9rem;font-weight:800;color:var(--text)}
+.stat .lbl{font-size:.78rem;color:var(--gray);margin-top:2px}
+
+/* PCB Illustration */
+.pcb-wrap{
+  background:var(--dark);border-radius:20px;padding:1.5rem;
+  border:1px solid #1e3a5f;position:relative;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.25);
+}
+.pcb-wrap::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 20% 20%,rgba(59,130,246,.12),transparent 70%);
+  pointer-events:none;
+}
+
+/* Process steps */
+.steps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem}
+.step-card{background:#fff;border-radius:14px;padding:1.75rem;border:1px solid var(--border);transition:transform .2s,box-shadow .2s}
+.step-card:hover{transform:translateY(-4px);box-shadow:0 12px 30px rgba(59,130,246,.1)}
+.step-num{
+  width:38px;height:38px;background:#dbeafe;color:var(--blue);
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:.85rem;margin-bottom:1rem;
+}
+.step-card h3{font-size:1rem;font-weight:700;margin-bottom:.5rem}
+.step-card p{font-size:.85rem;color:var(--gray);line-height:1.65}
+
+/* WHY SECTION */
+.why-band{background:var(--blue);padding:70px 0}
+.why-band h2{color:#fff;font-size:2rem;font-weight:800;text-align:center;margin-bottom:.5rem}
+.why-band .sub{color:rgba(255,255,255,.8);text-align:center;margin-bottom:2.5rem;font-size:1rem}
+.why-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+.why-card{
+  background:rgba(255,255,255,.1);border-radius:16px;padding:2rem;
+  border:1px solid rgba(255,255,255,.15);
+}
+.why-icon{font-size:2rem;margin-bottom:.75rem}
+.why-card h3{color:#fff;font-size:1rem;font-weight:700;margin-bottom:.5rem}
+.why-card p{color:rgba(255,255,255,.75);font-size:.875rem;line-height:1.65}
+
+/* ═══ PROFILE ═══ */
+#profile{background:#fff;padding:0}
+.profile-hero{
+  background:var(--dark);padding:90px 0 70px;text-align:center;
+  background-image:radial-gradient(ellipse at 50% 0%,rgba(59,130,246,.15),transparent 60%);
+}
+.avatar{
+  width:96px;height:96px;border-radius:50%;
+  background:linear-gradient(135deg,#06b6d4,#3b82f6);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.6rem;font-weight:800;color:#fff;margin:0 auto 1.25rem;
+  border:3px solid rgba(255,255,255,.2);
+}
+.profile-hero h1{color:#fff;font-size:2.4rem;font-weight:800;margin-bottom:.4rem}
+.profile-hero .role{color:var(--blue);font-size:1.1rem;font-weight:600;margin-bottom:1rem}
+.profile-hero .tagline{color:rgba(255,255,255,.7);max-width:580px;margin:0 auto 1.75rem;line-height:1.7;font-size:.95rem}
+.tag-row{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:center}
+.tag{
+  background:rgba(255,255,255,.1);color:rgba(255,255,255,.85);
+  border:1px solid rgba(255,255,255,.15);border-radius:999px;
+  padding:6px 16px;font-size:.8rem;font-weight:500;
+}
+.profile-body{padding:70px 0}
+.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
+.about-text h2{font-size:1.75rem;font-weight:800;margin-bottom:1.25rem}
+.about-text p{color:var(--gray);line-height:1.8;margin-bottom:1.1rem;font-size:.95rem}
+.about-text p strong{color:var(--text)}
+.meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.75rem}
+.meta-item{
+  background:var(--light);border-radius:12px;padding:1.25rem;
+  border:1px solid var(--border);
+}
+.meta-item .lbl{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--gray);font-weight:600;margin-bottom:.35rem}
+.meta-item .val{font-size:.95rem;font-weight:700;color:var(--text)}
+.skills-panel h3{font-size:1.1rem;font-weight:700;margin-bottom:1.5rem;display:flex;align-items:center;gap:.5rem}
+.skill-bar{margin-bottom:1.1rem}
+.skill-top{display:flex;justify-content:space-between;margin-bottom:.4rem;font-size:.875rem;font-weight:500}
+.bar-bg{height:8px;background:#e2e8f0;border-radius:999px;overflow:hidden}
+.bar-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--blue),#06b6d4);transition:width 1s ease}
+.bar-fill.green{background:linear-gradient(90deg,var(--green),#16a34a)}
+.mcu-tags{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem}
+.mcu-tag{
+  background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;
+  border-radius:8px;padding:5px 12px;font-size:.8rem;font-weight:600;
+}
+.domains-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-top:3rem}
+.domain-card{background:#fff;border-radius:14px;padding:1.75rem;border:1px solid var(--border);transition:transform .2s,box-shadow .2s}
+.domain-card:hover{transform:translateY(-4px);box-shadow:0 12px 30px rgba(59,130,246,.08)}
+.domain-icon{font-size:2rem;margin-bottom:.75rem}
+.domain-card h3{font-size:1rem;font-weight:700;margin-bottom:.75rem}
+.domain-card ul{list-style:none;display:flex;flex-direction:column;gap:.4rem}
+.domain-card ul li{font-size:.82rem;color:var(--gray);display:flex;align-items:center;gap:6px}
+.domain-card ul li::before{content:'';width:14px;height:14px;background:#dcfce7;border-radius:50%;border:2px solid var(--green);flex-shrink:0}
+
+/* ═══ PORTFOLIO ═══ */
+#portfolio{background:var(--light)}
+.port-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem;margin-bottom:2.5rem}
+.port-stat{background:#fff;border-radius:12px;padding:1.25rem;border:1px solid var(--border);text-align:center}
+.port-stat .big{font-size:2rem;font-weight:800}
+.port-stat .big.blue{color:var(--blue)}
+.port-stat .big.orange{color:#f97316}
+.port-stat .big.teal{color:#0891b2}
+.port-stat .big.purple{color:#7c3aed}
+.port-stat .big.green2{color:var(--green)}
+.port-stat .sm{font-size:.8rem;color:var(--gray);margin-top:2px;font-weight:500}
+.filter-bar{display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:2.5rem}
+.filter-btn{
+  display:flex;align-items:center;gap:.4rem;
+  border:1.5px solid var(--border);background:#fff;border-radius:999px;
+  padding:8px 18px;font-size:.85rem;font-weight:600;cursor:pointer;
+  color:var(--gray);transition:all .2s;
+}
+.filter-btn.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+.filter-btn:hover:not(.active){border-color:var(--blue);color:var(--blue)}
+.projects-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+.project-card{
+  background:#fff;border-radius:16px;overflow:hidden;
+  border:1px solid var(--border);transition:transform .2s,box-shadow .2s;
+}
+.project-card:hover{transform:translateY(-5px);box-shadow:0 16px 40px rgba(0,0,0,.1)}
+.card-thumb{
+  height:160px;display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.card-thumb svg{width:90px;height:90px;opacity:.9}
+.card-badges{position:absolute;top:12px;right:12px;display:flex;gap:6px}
+.layer-badge{
+  background:rgba(0,0,0,.5);color:#fff;font-size:.7rem;font-weight:700;
+  border-radius:6px;padding:3px 8px;backdrop-filter:blur(4px);
+}
+.status-badge{
+  background:rgba(34,197,94,.2);color:#fff;font-size:.7rem;font-weight:700;
+  border-radius:6px;padding:3px 8px;backdrop-filter:blur(4px);border:1px solid rgba(34,197,94,.4);
+}
+.card-body{padding:1.25rem}
+.card-body h3{font-size:1rem;font-weight:700;margin-bottom:.25rem}
+.card-chip{
+  display:inline-block;color:var(--blue);font-size:.75rem;font-weight:600;
+  margin-bottom:.6rem;
+}
+.card-body p{font-size:.83rem;color:var(--gray);line-height:1.6;margin-bottom:.75rem}
+.card-tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.85rem}
+.ctag{
+  background:#f1f5f9;color:#475569;border-radius:6px;
+  padding:3px 9px;font-size:.73rem;font-weight:500;
+}
+.card-features{display:grid;grid-template-columns:1fr 1fr;gap:.3rem}
+.feat{font-size:.77rem;color:var(--gray);display:flex;align-items:center;gap:5px}
+.feat::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0}
+.want-similar{background:var(--blue);padding:60px 0;text-align:center;margin-top:3rem;border-radius:20px}
+.want-similar h3{color:#fff;font-size:1.75rem;font-weight:800;margin-bottom:.5rem}
+.want-similar p{color:rgba(255,255,255,.8);margin-bottom:1.75rem;font-size:1rem}
+
+/* ═══ SERVICES ═══ */
+#services{background:#fff}
+.packages-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.75rem;margin-top:2.5rem}
+.pkg{background:#fff;border-radius:18px;padding:2rem;border:2px solid var(--border);position:relative;transition:transform .2s,box-shadow .2s}
+.pkg:hover{transform:translateY(-5px);box-shadow:0 16px 40px rgba(0,0,0,.08)}
+.pkg.popular{border-color:var(--blue)}
+.pkg.premium{border-color:var(--green)}
+.pkg-badge{
+  display:inline-block;border-radius:999px;padding:4px 14px;
+  font-size:.75rem;font-weight:700;margin-bottom:1rem;
+  background:#f1f5f9;color:var(--gray);
+}
+.pkg.popular .pkg-badge{background:var(--blue);color:#fff}
+.pkg.premium .pkg-badge{background:var(--green);color:#fff}
+.pkg h3{font-size:1.5rem;font-weight:800;margin-bottom:.25rem}
+.pkg .price{color:var(--blue);font-weight:600;font-size:.9rem;margin-bottom:1.25rem;cursor:pointer;text-decoration:underline}
+.pkg ul{list-style:none;display:flex;flex-direction:column;gap:.55rem;margin-bottom:1.5rem}
+.pkg ul li{font-size:.875rem;color:var(--gray);display:flex;align-items:flex-start;gap:8px;line-height:1.5}
+.pkg ul li::before{
+  content:'';width:16px;height:16px;min-width:16px;
+  background:#dcfce7;border-radius:50%;border:2px solid var(--green);
+  margin-top:1px;
+}
+.pkg-btn{
+  width:100%;padding:12px;border-radius:10px;font-weight:700;
+  font-size:.95rem;cursor:pointer;border:2px solid var(--border);
+  background:#fff;transition:all .2s;
+}
+.pkg.popular .pkg-btn{background:var(--blue);color:#fff;border-color:var(--blue)}
+.pkg.premium .pkg-btn{background:var(--green);color:#fff;border-color:var(--green)}
+.pkg-btn:hover{opacity:.85;transform:translateY(-1px)}
+
+/* ═══ CONTACT ═══ */
+#contact{background:#fff;padding:0}
+.contact-hero{
+  background:linear-gradient(135deg,var(--dark) 0%,#1e3a5f 100%);
+  padding:90px 0 70px;text-align:center;
+}
+.contact-icon{
+  width:64px;height:64px;border-radius:16px;
+  background:rgba(59,130,246,.2);border:1px solid rgba(59,130,246,.3);
+  display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;
+}
+.contact-hero h1{color:#fff;font-size:2.2rem;font-weight:800;margin-bottom:.75rem}
+.contact-hero p{color:rgba(255,255,255,.75);max-width:500px;margin:0 auto 2rem;line-height:1.7}
+.contact-pills{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap}
+.cpill{
+  background:rgba(255,255,255,.1);color:rgba(255,255,255,.85);
+  border:1px solid rgba(255,255,255,.15);border-radius:999px;
+  padding:8px 18px;font-size:.82rem;font-weight:500;
+  display:flex;align-items:center;gap:6px;
+}
+.contact-body{padding:70px 0;background:var(--light)}
+.contact-grid{display:grid;grid-template-columns:1fr 1.6fr;gap:3rem;align-items:start}
+.channels h3{font-size:1.25rem;font-weight:800;margin-bottom:.4rem}
+.channels > p{color:var(--gray);font-size:.9rem;margin-bottom:1.5rem;line-height:1.6}
+.channel-cards{display:flex;flex-direction:column;gap:1rem;margin-bottom:1.75rem}
+.ch-card{
+  background:#fff;border-radius:14px;padding:1.25rem 1.5rem;
+  border:1px solid var(--border);display:flex;align-items:center;gap:1rem;
+  transition:border-color .2s,transform .2s;text-decoration:none;color:inherit;
+}
+.ch-card:hover{border-color:var(--blue);transform:translateX(4px)}
+.ch-icon{
+  width:40px;height:40px;border-radius:10px;display:flex;
+  align-items:center;justify-content:center;flex-shrink:0;font-size:1.2rem;
+}
+.ch-icon.mail{background:#dbeafe}
+.ch-icon.github{background:#f1f5f9}
+.ch-icon.fiverr{background:#dcfce7}
+.ch-info .label{font-size:.78rem;color:var(--gray);font-weight:500;margin-bottom:2px}
+.ch-info .val{font-size:.95rem;font-weight:700;color:var(--text)}
+.ch-info .hint{font-size:.78rem;color:var(--gray)}
+.avail-card{
+  background:#fff;border-radius:14px;padding:1.5rem;border:1px solid var(--border);
+}
+.avail-header{display:flex;align-items:center;gap:8px;font-size:1rem;font-weight:700;margin-bottom:1rem}
+.green-dot{width:10px;height:10px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
+.avail-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+.avail-row{font-size:.83rem;color:var(--gray)}
+.avail-row strong{color:var(--text)}
+
+/* Contact Form */
+.form-card{
+  background:#fff;border-radius:18px;padding:2.5rem;
+  border:1px solid var(--border);box-shadow:0 4px 24px rgba(0,0,0,.05);
+}
+.form-card h3{font-size:1.25rem;font-weight:800;margin-bottom:.3rem}
+.form-card .form-sub{font-size:.875rem;color:var(--gray);margin-bottom:1.75rem;line-height:1.5}
+.form-card .form-sub strong{color:var(--text)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+.form-group{display:flex;flex-direction:column;gap:.4rem;margin-bottom:1rem}
+.form-group label{font-size:.82rem;font-weight:600;color:var(--text)}
+.form-group input,.form-group select,.form-group textarea{
+  border:1.5px solid var(--border);border-radius:10px;padding:11px 14px;
+  font-size:.9rem;font-family:inherit;color:var(--text);
+  transition:border-color .2s;outline:none;background:#fff;
+}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--blue)}
+.form-group textarea{resize:vertical;min-height:130px}
+.form-submit{
+  width:100%;padding:14px;background:var(--blue);color:#fff;
+  border:none;border-radius:12px;font-size:1rem;font-weight:700;
+  cursor:pointer;transition:all .2s;display:flex;align-items:center;
+  justify-content:center;gap:8px;
+}
+.form-submit:hover{background:var(--blue-dark);transform:translateY(-1px)}
+.form-note{text-align:center;font-size:.8rem;color:var(--gray);margin-top:.75rem}
+.form-success{
+  display:none;background:#f0fdf4;border:1px solid #bbf7d0;
+  border-radius:12px;padding:1.5rem;text-align:center;margin-top:1rem;
+}
+.form-success h4{color:#166534;font-size:1rem;font-weight:700;margin-bottom:.3rem}
+.form-success p{color:#15803d;font-size:.875rem}
+.form-error{
+  display:none;background:#fef2f2;border:1px solid #fecaca;
+  border-radius:12px;padding:1rem;text-align:center;margin-top:.75rem;
+  font-size:.85rem;color:#b91c1c;
+}
+
+/* CTA BAND */
+.cta-band{background:var(--dark);padding:80px 0;text-align:center}
+.cta-band .icon{font-size:2.5rem;margin-bottom:1rem}
+.cta-band h2{color:#fff;font-size:2rem;font-weight:800;margin-bottom:.75rem}
+.cta-band p{color:rgba(255,255,255,.7);margin-bottom:2rem;font-size:1rem;max-width:480px;margin-left:auto;margin-right:auto}
+
+/* FOOTER */
+footer{background:var(--dark2);padding:60px 0 30px}
+.footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1.5fr;gap:3rem;margin-bottom:3rem}
+.footer-brand p{color:rgba(255,255,255,.55);font-size:.875rem;line-height:1.7;margin-top:.75rem;margin-bottom:1.25rem}
+.footer-socials{display:flex;gap:.75rem}
+.fsocial{
+  width:36px;height:36px;background:rgba(255,255,255,.1);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;font-size:1rem;
+  text-decoration:none;transition:background .2s;cursor:pointer;
+}
+.fsocial:hover{background:var(--blue)}
+.footer-col h4{color:#fff;font-size:.85rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.25rem}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:.75rem}
+.footer-col ul a{color:rgba(255,255,255,.55);text-decoration:none;font-size:.875rem;transition:color .2s}
+.footer-col ul a:hover{color:#fff}
+.skill-pills{display:flex;flex-wrap:wrap;gap:.4rem}
+.skill-pill{
+  background:rgba(255,255,255,.08);color:rgba(255,255,255,.7);
+  border:1px solid rgba(255,255,255,.1);border-radius:6px;
+  padding:4px 10px;font-size:.75rem;font-weight:500;
+}
+.contact-quick{display:flex;flex-direction:column;gap:.75rem}
+.cq-item{display:flex;align-items:flex-start;gap:.75rem;font-size:.83rem;color:rgba(255,255,255,.6)}
+.cq-item svg{flex-shrink:0;margin-top:1px}
+.avail-pill{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);
+  border-radius:999px;padding:5px 12px;font-size:.78rem;color:#4ade80;font-weight:600;
+  margin-top:.5rem;
+}
+.footer-bottom{
+  border-top:1px solid rgba(255,255,255,.08);padding-top:1.5rem;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem;
+}
+.footer-bottom p{color:rgba(255,255,255,.4);font-size:.8rem}
+
+/* Responsive */
+@media(max-width:900px){
+  .nav-links,.nav-cta{display:none}
+  .hamburger{display:flex}
+  .hero-inner,.profile-grid,.contact-grid,.footer-grid{grid-template-columns:1fr}
+  .steps-grid,.packages-grid,.why-cards,.domains-grid{grid-template-columns:1fr 1fr}
+  .projects-grid{grid-template-columns:1fr 1fr}
+  .port-stats{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:600px){
+  .steps-grid,.why-cards,.domains-grid,.packages-grid{grid-template-columns:1fr}
+  .projects-grid{grid-template-columns:1fr}
+  .port-stats{grid-template-columns:1fr 1fr}
+  .form-row{grid-template-columns:1fr}
+  .hero-stats{gap:1.5rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#home" class="logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="3" y="3" width="18" height="18" rx="2" stroke="white" stroke-width="2"/>
+        <circle cx="8" cy="8" r="1.5" fill="white"/>
+        <circle cx="16" cy="8" r="1.5" fill="white"/>
+        <circle cx="8" cy="16" r="1.5" fill="white"/>
+        <circle cx="16" cy="16" r="1.5" fill="white"/>
+        <line x1="8" y1="8" x2="16" y2="8" stroke="white" stroke-width="1.5"/>
+        <line x1="8" y1="8" x2="8" y2="16" stroke="white" stroke-width="1.5"/>
+        <line x1="16" y1="8" x2="16" y2="16" stroke="white" stroke-width="1.5"/>
+        <line x1="8" y1="16" x2="16" y2="16" stroke="white" stroke-width="1.5"/>
+        <circle cx="12" cy="12" r="1.5" fill="#22c55e"/>
+      </svg>
+    </div>
+    <span class="logo-text">AKV<span> PCB Designs</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#home" class="active">Home</a></li>
+    <li><a href="#profile">Profile</a></li>
+    <li><a href="#services">My Services</a></li>
+    <li><a href="#portfolio">Portfolio</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Hire Me</a>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#home" onclick="closeMenu()">Home</a>
+  <a href="#profile" onclick="closeMenu()">Profile</a>
+  <a href="#services" onclick="closeMenu()">My Services</a>
+  <a href="#portfolio" onclick="closeMenu()">Portfolio</a>
+  <a href="#contact" onclick="closeMenu()">Contact</a>
+  <a href="#contact" class="nav-cta" style="text-align:center" onclick="closeMenu()">Hire Me</a>
+</div>
+
+<!-- ═══ HOME ═══ -->
+<section id="home">
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-left">
+        <div class="hero-badge"><span class="badge-dot"></span> Available for Projects Worldwide</div>
+        <h1 class="hero">PCB Design &amp; <span class="blue">Electronics</span> Engineering</h1>
+        <p>Precision circuit board design for power electronics, IoT, and embedded systems. From schematic to production-ready Gerbers — delivered in 2–3 days.</p>
+        <div class="hero-btns">
+          <a href="#contact" class="btn-primary">Start a Project →</a>
+          <a href="#portfolio" class="btn-outline">See My Work</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><div class="num">13+</div><div class="lbl">Projects Completed</div></div>
+          <div class="stat"><div class="num">2–3</div><div class="lbl">Day Delivery</div></div>
+          <div class="stat"><div class="num">100%</div><div class="lbl">DFM Verified</div></div>
+        </div>
+      </div>
+      <!-- COMPLEX PCB SVG ILLUSTRATION -->
+      <div class="pcb-wrap">
+        <svg viewBox="0 0 420 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+          <defs>
+            <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+              <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#1e3a5f" stroke-width="0.4"/>
+            </pattern>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+              <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+            <linearGradient id="traceGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.8"/>
+              <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:0.8"/>
+            </linearGradient>
+            <linearGradient id="traceGrad2" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" style="stop-color:#22c55e;stop-opacity:0.8"/>
+              <stop offset="100%" style="stop-color:#0891b2;stop-opacity:0.8"/>
+            </linearGradient>
+          </defs>
+          <!-- PCB Board -->
+          <rect x="10" y="10" width="400" height="280" rx="8" fill="#0d2136" stroke="#1e4a6e" stroke-width="1.5"/>
+          <rect x="10" y="10" width="400" height="280" rx="8" fill="url(#grid)"/>
+          <!-- Board edge -->
+          <rect x="10" y="10" width="400" height="280" rx="8" fill="none" stroke="#1e6a3e" stroke-width="2" opacity="0.6"/>
+
+          <!-- Mounting holes -->
+          <circle cx="30" cy="30" r="5" fill="none" stroke="#2a6" stroke-width="1.5"/>
+          <circle cx="30" cy="30" r="2" fill="#0d2136"/>
+          <circle cx="390" cy="30" r="5" fill="none" stroke="#2a6" stroke-width="1.5"/>
+          <circle cx="390" cy="30" r="2" fill="#0d2136"/>
+          <circle cx="30" cy="270" r="5" fill="none" stroke="#2a6" stroke-width="1.5"/>
+          <circle cx="30" cy="270" r="2" fill="#0d2136"/>
+          <circle cx="390" cy="270" r="5" fill="none" stroke="#2a6" stroke-width="1.5"/>
+          <circle cx="390" cy="270" r="2" fill="#0d2136"/>
+
+          <!-- PCB Traces - Horizontal -->
+          <path d="M 50 60 L 180 60 L 200 80 L 320 80" stroke="url(#traceGrad)" stroke-width="2.5" fill="none" filter="url(#glow)"/>
+          <path d="M 50 100 L 120 100 L 140 120 L 280 120 L 300 100 L 360 100" stroke="url(#traceGrad)" stroke-width="2" fill="none" opacity="0.7"/>
+          <path d="M 60 200 L 160 200 L 180 180 L 260 180" stroke="url(#traceGrad2)" stroke-width="2.5" fill="none" filter="url(#glow)"/>
+          <path d="M 80 240 L 200 240 L 220 220 L 340 220" stroke="url(#traceGrad2)" stroke-width="2" fill="none" opacity="0.7"/>
+          <!-- Vertical traces -->
+          <path d="M 80 60 L 80 100 L 80 140" stroke="#3b82f6" stroke-width="1.8" fill="none" opacity="0.6"/>
+          <path d="M 160 80 L 160 140 L 160 200" stroke="#06b6d4" stroke-width="1.8" fill="none" opacity="0.6"/>
+          <path d="M 280 80 L 280 120 L 280 160 L 280 220" stroke="#22c55e" stroke-width="1.8" fill="none" opacity="0.6"/>
+          <path d="M 340 100 L 340 160 L 340 220" stroke="#a855f7" stroke-width="1.8" fill="none" opacity="0.6"/>
+
+          <!-- IC / Microcontroller chip (center) -->
+          <rect x="185" y="115" width="70" height="70" rx="4" fill="#1a3a5c" stroke="#3b82f6" stroke-width="1.5"/>
+          <rect x="190" y="120" width="60" height="60" rx="2" fill="#0f2744"/>
+          <!-- IC pins left -->
+          <rect x="175" y="122" width="10" height="4" rx="1" fill="#c0a060"/>
+          <rect x="175" y="130" width="10" height="4" rx="1" fill="#c0a060"/>
+          <rect x="175" y="138" width="10" height="4" rx="1" fill="#c0a060"/>
+          <rect x="175" y="146" width="10" height="4" rx="1" fill="#c0a060"/>
+          <rect x="175" y="154" width="10" height="4" rx="1" fill="#c0a060"/>
+          <rect x="175" y="162" width="10" height="4" rx="1" fill="#c0a060"/>
+          <!-- IC pins right -->
+          <rect x="255" y="122" width="10" height="4" rx="1" fill="#c0a060"/>
+          <rect x="255" y="130" width="10" height="4" rx="1" fill="#c0a060"/>
+          <rect x="255" y="138" width="10" height="4" rx="1" fill="#c0a060"/>
+          <rect x="255" y="146" width="10" height="4" rx="1" fill="#c0a060"/>
+          <rect x="255" y="154" width="10" height="4" rx="1" fill="#c0a060"/>
+          <rect x="255" y="162" width="10" height="4" rx="1" fill="#c0a060"/>
+          <!-- IC pins top -->
+          <rect x="196" y="105" width="4" height="10" rx="1" fill="#c0a060"/>
+          <rect x="204" y="105" width="4" height="10" rx="1" fill="#c0a060"/>
+          <rect x="212" y="105" width="4" height="10" rx="1" fill="#c0a060"/>
+          <rect x="220" y="105" width="4" height="10" rx="1" fill="#c0a060"/>
+          <rect x="228" y="105" width="4" height="10" rx="1" fill="#c0a060"/>
+          <rect x="236" y="105" width="4" height="10" rx="1" fill="#c0a060"/>
+          <!-- IC pins bottom -->
+          <rect x="196" y="185" width="4" height="10" rx="1" fill="#c0a060"/>
+          <rect x="204" y="185" width="4" height="10" rx="1" fill="#c0a060"/>
+          <rect x="212" y="185" width="4" height="10" rx="1" fill="#c0a060"/>
+          <rect x="220" y="185" width="4" height="10" rx="1" fill="#c0a060"/>
+          <rect x="228" y="185" width="4" height="10" rx="1" fill="#c0a060"/>
+          <rect x="236" y="185" width="4" height="10" rx="1" fill="#c0a060"/>
+          <!-- IC label -->
+          <text x="220" y="148" text-anchor="middle" fill="#3b82f6" font-size="7" font-family="monospace" font-weight="bold">STM32</text>
+          <text x="220" y="158" text-anchor="middle" fill="#64748b" font-size="5.5" font-family="monospace">F103C8T6</text>
+          <!-- Notch -->
+          <circle cx="194" cy="122" r="3" fill="#0f2744" stroke="#3b82f6" stroke-width="0.8"/>
+
+          <!-- Capacitors (small rectangles) -->
+          <rect x="50" y="55" width="12" height="8" rx="1" fill="#2a5a3a" stroke="#22c55e" stroke-width="1"/>
+          <rect x="50" y="55" width="12" height="8" rx="1" fill="none" stroke="#22c55e" stroke-width="1"/>
+          <line x1="56" y1="55" x2="56" y2="63" stroke="#22c55e" stroke-width="0.8"/>
+          <rect x="50" y="95" width="12" height="8" rx="1" fill="#2a5a3a" stroke="#22c55e" stroke-width="1"/>
+          <line x1="56" y1="95" x2="56" y2="103" stroke="#22c55e" stroke-width="0.8"/>
+          <rect x="50" y="195" width="12" height="8" rx="1" fill="#2a5a3a" stroke="#22c55e" stroke-width="1"/>
+          <line x1="56" y1="195" x2="56" y2="203" stroke="#22c55e" stroke-width="0.8"/>
+          <rect x="360" y="95" width="12" height="8" rx="1" fill="#2a5a3a" stroke="#22c55e" stroke-width="1"/>
+          <line x1="366" y1="95" x2="366" y2="103" stroke="#22c55e" stroke-width="0.8"/>
+
+          <!-- Resistors -->
+          <rect x="120" y="96" width="16" height="8" rx="2" fill="#c0a060"/>
+          <line x1="120" y1="100" x2="116" y2="100" stroke="#c0a060" stroke-width="1.5"/>
+          <line x1="136" y1="100" x2="140" y2="100" stroke="#c0a060" stroke-width="1.5"/>
+          <rect x="300" y="96" width="16" height="8" rx="2" fill="#c0a060"/>
+          <line x1="300" y1="100" x2="296" y2="100" stroke="#c0a060" stroke-width="1.5"/>
+          <line x1="316" y1="100" x2="320" y2="100" stroke="#c0a060" stroke-width="1.5"/>
+          <rect x="155" y="196" width="16" height="8" rx="2" fill="#c0a060"/>
+          <line x1="155" y1="200" x2="151" y2="200" stroke="#c0a060" stroke-width="1.5"/>
+          <line x1="171" y1="200" x2="175" y2="200" stroke="#c0a060" stroke-width="1.5"/>
+
+          <!-- USB Connector -->
+          <rect x="340" y="130" width="45" height="30" rx="3" fill="#2a3a5a" stroke="#4a6a8a" stroke-width="1.5"/>
+          <rect x="345" y="135" width="35" height="20" rx="2" fill="#0d2136"/>
+          <rect x="350" y="138" width="7" height="14" rx="1" fill="#3a3a5a"/>
+          <rect x="361" y="138" width="7" height="14" rx="1" fill="#3a3a5a"/>
+          <rect x="372" y="138" width="5" height="14" rx="1" fill="#3a3a5a"/>
+          <text x="362" y="172" text-anchor="middle" fill="#64748b" font-size="5" font-family="monospace">USB-C</text>
+
+          <!-- Crystal oscillator -->
+          <ellipse cx="100" cy="155" rx="8" ry="14" fill="#2a3a5a" stroke="#a855f7" stroke-width="1.2"/>
+          <line x1="92" y1="155" x2="86" y2="155" stroke="#a855f7" stroke-width="1.2"/>
+          <line x1="108" y1="155" x2="114" y2="155" stroke="#a855f7" stroke-width="1.2"/>
+          <text x="100" y="158" text-anchor="middle" fill="#a855f7" font-size="4.5" font-family="monospace">8MHz</text>
+
+          <!-- LED indicators -->
+          <circle cx="360" cy="55" r="5" fill="#22c55e" opacity="0.9" filter="url(#glow)"/>
+          <circle cx="375" cy="55" r="5" fill="#3b82f6" opacity="0.9" filter="url(#glow)"/>
+          <circle cx="390" cy="55" r="5" fill="#ef4444" opacity="0.9" filter="url(#glow)"/>
+          <text x="375" y="72" text-anchor="middle" fill="#64748b" font-size="5" font-family="monospace">STATUS</text>
+
+          <!-- Voltage regulator -->
+          <rect x="50" y="220" width="30" height="22" rx="3" fill="#1a3a5c" stroke="#f97316" stroke-width="1.2"/>
+          <rect x="55" y="225" width="20" height="12" rx="2" fill="#0d2136"/>
+          <line x1="58" y1="242" x2="58" y2="252" stroke="#f97316" stroke-width="1.5"/>
+          <line x1="65" y1="242" x2="65" y2="252" stroke="#f97316" stroke-width="1.5"/>
+          <line x1="72" y1="242" x2="72" y2="252" stroke="#f97316" stroke-width="1.5"/>
+          <text x="65" y="232" text-anchor="middle" fill="#f97316" font-size="4.5" font-family="monospace">LM7805</text>
+
+          <!-- Header pins (GPIO) -->
+          <g transform="translate(100,220)">
+            <rect x="0" y="0" width="60" height="10" rx="1" fill="#1a3a5c" stroke="#4a6a8a" stroke-width="1"/>
+            <circle cx="5" cy="5" r="2" fill="#c0a060"/>
+            <circle cx="12" cy="5" r="2" fill="#c0a060"/>
+            <circle cx="19" cy="5" r="2" fill="#c0a060"/>
+            <circle cx="26" cy="5" r="2" fill="#c0a060"/>
+            <circle cx="33" cy="5" r="2" fill="#c0a060"/>
+            <circle cx="40" cy="5" r="2" fill="#c0a060"/>
+            <circle cx="47" cy="5" r="2" fill="#c0a060"/>
+            <circle cx="54" cy="5" r="2" fill="#c0a060"/>
+            <rect x="0" y="12" width="60" height="10" rx="1" fill="#1a3a5c" stroke="#4a6a8a" stroke-width="1"/>
+            <circle cx="5" cy="17" r="2" fill="#c0a060"/>
+            <circle cx="12" cy="17" r="2" fill="#c0a060"/>
+            <circle cx="19" cy="17" r="2" fill="#c0a060"/>
+            <circle cx="26" cy="17" r="2" fill="#c0a060"/>
+            <circle cx="33" cy="17" r="2" fill="#c0a060"/>
+            <circle cx="40" cy="17" r="2" fill="#c0a060"/>
+            <circle cx="47" cy="17" r="2" fill="#c0a060"/>
+            <circle cx="54" cy="17" r="2" fill="#c0a060"/>
+            <text x="30" y="38" text-anchor="middle" fill="#64748b" font-size="5" font-family="monospace">GPIO HEADER</text>
+          </g>
+
+          <!-- Via clusters -->
+          <circle cx="165" cy="140" r="3.5" fill="none" stroke="#c0a060" stroke-width="1.2"/>
+          <circle cx="165" cy="140" r="1.5" fill="#c0a060"/>
+          <circle cx="175" cy="140" r="3.5" fill="none" stroke="#c0a060" stroke-width="1.2"/>
+          <circle cx="175" cy="140" r="1.5" fill="#c0a060"/>
+          <circle cx="165" cy="148" r="3.5" fill="none" stroke="#c0a060" stroke-width="1.2"/>
+          <circle cx="165" cy="148" r="1.5" fill="#c0a060"/>
+          <circle cx="265" cy="140" r="3.5" fill="none" stroke="#c0a060" stroke-width="1.2"/>
+          <circle cx="265" cy="140" r="1.5" fill="#c0a060"/>
+          <circle cx="275" cy="140" r="3.5" fill="none" stroke="#c0a060" stroke-width="1.2"/>
+          <circle cx="275" cy="140" r="1.5" fill="#c0a060"/>
+
+          <!-- Board label -->
+          <text x="22" y="292" fill="#1e4a6e" font-size="7" font-family="monospace">AKV-PCB-DESIGNS-REV1.0</text>
+          <text x="370" y="292" fill="#1e4a6e" font-size="7" font-family="monospace">JLC</text>
+
+          <!-- Animated signal pulses -->
+          <circle r="3" fill="#3b82f6" opacity="0.9" filter="url(#glow)">
+            <animateMotion dur="3s" repeatCount="indefinite" path="M50,60 L180,60 L200,80 L320,80"/>
+            <animate attributeName="opacity" values="1;0.3;1" dur="3s" repeatCount="indefinite"/>
+          </circle>
+          <circle r="3" fill="#22c55e" opacity="0.9" filter="url(#glow)">
+            <animateMotion dur="4s" repeatCount="indefinite" path="M60,200 L160,200 L180,180 L260,180"/>
+            <animate attributeName="opacity" values="0.3;1;0.3" dur="4s" repeatCount="indefinite"/>
+          </circle>
+          <circle r="2.5" fill="#a855f7" opacity="0.9" filter="url(#glow)">
+            <animateMotion dur="2.5s" repeatCount="indefinite" path="M340,100 L340,160 L340,220"/>
+            <animate attributeName="opacity" values="1;0.2;1" dur="2.5s" repeatCount="indefinite"/>
+          </circle>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Process Steps -->
+    <div style="margin-top:5rem">
+      <div class="section-header">
+        <div class="section-label">How It Works</div>
+        <h2>From Idea to Production</h2>
+        <p>A streamlined process to get your PCB from concept to manufacturing-ready files.</p>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card"><div class="step-num">01</div><h3>Schematic Design</h3><p>Clean schematics to industry standards, fully annotated with proper component references.</p></div>
+        <div class="step-card"><div class="step-num">02</div><h3>PCB Layout</h3><p>Optimized routing with DFM checks and impedance control for high-speed signals.</p></div>
+        <div class="step-card"><div class="step-num">03</div><h3>Review &amp; Verify</h3><p>Electrical rules check, design review, and validation against manufacturer constraints.</p></div>
+        <div class="step-card"><div class="step-num">04</div><h3>Gerber Delivery</h3><p>Production-ready Gerbers + BOM for JLCPCB/PCBWay with full documentation.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Why Work With Me -->
+  <div class="why-band" style="margin-top:5rem">
+    <div class="container">
+      <h2>Why Work With Me?</h2>
+      <p class="sub">Production-ready deliverables, clean designs, and fast turnaround. No revisions needed.</p>
+      <div class="why-cards">
+        <div class="why-card"><div class="why-icon">🏆</div><h3>Production Ready</h3><p>Deliverables are Gerber/BOM-ready for JLCPCB and PCBWay. No back-and-forth required.</p></div>
+        <div class="why-card"><div class="why-icon">⚡</div><h3>2–3 Day Delivery</h3><p>Fast turnaround for most projects. Tight deadlines are my specialty, not the exception.</p></div>
+        <div class="why-card"><div class="why-icon">🛡️</div><h3>DFM Verified</h3><p>Every design goes through Design for Manufacture checks to prevent costly board spins.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PROFILE ═══ -->
+<section id="profile" style="padding:0">
+  <div class="profile-hero">
+    <div class="container">
+      <div class="avatar">AK</div>
+      <h1>Abhishek K V</h1>
+      <div class="role">PCB Designer &amp; Electronics Engineer</div>
+      <p class="tagline">Turning complex electronics into clean, manufacturable circuit boards — from first schematic to production-ready Gerbers.</p>
+      <div class="tag-row">
+        <span class="tag">KiCad Expert</span>
+        <span class="tag">Power Electronics</span>
+        <span class="tag">IoT Design</span>
+        <span class="tag">Embedded Systems</span>
+        <span class="tag">DFM Certified</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="profile-body">
+    <div class="container">
+      <div class="profile-grid">
+        <div class="about-text">
+          <h2>Precision in Every Trace</h2>
+          <p>I am <strong>Abhishek</strong> as a PCB designer and electronics engineer specializing in precision circuit board design. My focus spans power electronics, IoT systems, and embedded hardware — delivering production-ready designs from the first attempt.</p>
+          <p>I work with a comprehensive toolchain centered around <strong>KiCad</strong>, designing everything from compact sensor breakouts to multi-layer power boards. Every project goes through rigorous DFM checks and is compatible with leading PCB manufacturers like JLCPCB and PCBWay.</p>
+          <p>My philosophy: clean schematics, optimized routing, zero rework. Whether you need a quick prototype or a production-grade industrial board, I deliver on time with full documentation.</p>
+          <div class="meta-grid">
+            <div class="meta-item"><div class="lbl">Tools</div><div class="val">KiCad, Gerber, DXF</div></div>
+            <div class="meta-item"><div class="lbl">Delivery</div><div class="val">2–3 Business Days</div></div>
+            <div class="meta-item"><div class="lbl">Response</div><div class="val">Within 24 Hours</div></div>
+            <div class="meta-item"><div class="lbl">Availability</div><div class="val">Worldwide</div></div>
+          </div>
+        </div>
+        <div class="skills-panel">
+          <h3>⟨/⟩ Technical Skills</h3>
+          <div class="skill-bar"><div class="skill-top"><span>KiCad</span><span>95%</span></div><div class="bar-bg"><div class="bar-fill" style="width:95%"></div></div></div>
+          <div class="skill-bar"><div class="skill-top"><span>Schematic Design</span><span>92%</span></div><div class="bar-bg"><div class="bar-fill" style="width:92%"></div></div></div>
+          <div class="skill-bar"><div class="skill-top"><span>PCB Layout</span><span>95%</span></div><div class="bar-bg"><div class="bar-fill" style="width:95%"></div></div></div>
+          <div class="skill-bar"><div class="skill-top"><span>Gerber/DXF Export</span><span>90%</span></div><div class="bar-bg"><div class="bar-fill" style="width:90%"></div></div></div>
+          <div class="skill-bar"><div class="skill-top"><span>DFM Checks</span><span>88%</span></div><div class="bar-bg"><div class="bar-fill green" style="width:88%"></div></div></div>
+          <div class="skill-bar"><div class="skill-top"><span>BOM Preparation</span><span>88%</span></div><div class="bar-bg"><div class="bar-fill green" style="width:88%"></div></div></div>
+          <h3 style="margin-top:1.75rem">🔧 Microcontrollers</h3>
+          <div class="mcu-tags">
+            <span class="mcu-tag">ATmega328P</span>
+            <span class="mcu-tag">STM32F103</span>
+            <span class="mcu-tag">ESP8266</span>
+            <span class="mcu-tag">ESP32</span>
+            <span class="mcu-tag">RP2040</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Domains of Specialization -->
+      <div style="margin-top:3rem">
+        <div class="section-header">
+          <div class="section-label">Domains</div>
+          <h2>Areas of Specialization</h2>
+        </div>
+        <div class="domains-grid">
+          <div class="domain-card"><div class="domain-icon">⚡</div><h3>Power Electronics</h3><ul><li>Buck/Boost Converters</li><li>USB-C Li-Ion Chargers</li><li>Solar MPPT Chargers</li><li>Battery Management</li></ul></div>
+          <div class="domain-card"><div class="domain-icon">📡</div><h3>IoT &amp; Wireless</h3><ul><li>LoRa GPS Trackers</li><li>WiFi-enabled Boards</li><li>Sensor Breakouts</li><li>BME280 / MPU6050</li></ul></div>
+          <div class="domain-card"><div class="domain-icon">💻</div><h3>Microcontrollers</h3><ul><li>STM32 Blue Pill Clone</li><li>ESP8266 WiFi Board</li><li>ATmega328P Custom</li><li>Bootloader Support</li></ul></div>
+          <div class="domain-card"><div class="domain-icon">🏠</div><h3>Home Automation</h3><ul><li>4-Channel Relay</li><li>230V AC Compatible</li><li>Smart Switching</li><li>Safety Isolated Design</li></ul></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ MY SERVICES ═══ -->
+<section id="services" style="background:var(--light)">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">My Services</div>
+      <h2>Choose Your Package</h2>
+      <p>Flexible packages for every project size. Contact me for a custom quote.</p>
+    </div>
+    <div class="packages-grid">
+      <div class="pkg">
+        <div class="pkg-badge">Small Boards</div>
+        <h3>Basic</h3>
+        <div class="price" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Contact for quote</div>
+        <ul>
+          <li>Up to 2-layer PCB</li>
+          <li>Schematic + Layout</li>
+          <li>Gerber files</li>
+          <li>Basic BOM</li>
+          <li>3-day delivery</li>
+        </ul>
+        <button class="pkg-btn" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Get Started</button>
+      </div>
+      <div class="pkg popular">
+        <div class="pkg-badge">Most Popular</div>
+        <h3>Standard</h3>
+        <div class="price" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Contact for quote</div>
+        <ul>
+          <li>Up to 4-layer PCB</li>
+          <li>Schematic + Layout</li>
+          <li>Gerber + DXF files</li>
+          <li>Full BOM with LCSC refs</li>
+          <li>DFM check included</li>
+          <li>3-day delivery</li>
+        </ul>
+        <button class="pkg-btn" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Get Started</button>
+      </div>
+      <div class="pkg premium">
+        <div class="pkg-badge">Complex Projects</div>
+        <h3>Premium</h3>
+        <div class="price" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Contact for quote</div>
+        <ul>
+          <li>Multi-layer PCB (4+)</li>
+          <li>Full schematic design</li>
+          <li>Optimized layout &amp; routing</li>
+          <li>Complete Gerber package</li>
+          <li>Assembly-ready BOM</li>
+          <li>DFM + design review</li>
+          <li>Priority support</li>
+        </ul>
+        <button class="pkg-btn" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Get Started</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PORTFOLIO ═══ -->
+<section id="portfolio" style="background:#fff">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Portfolio Projects</div>
+      <h2>My PCB Projects</h2>
+      <p>13 completed production-ready designs across power electronics, IoT, microcontrollers, and home automation.</p>
+    </div>
+
+    <!-- Stats -->
+    <div class="port-stats">
+      <div class="port-stat"><div class="big blue">13</div><div class="sm">Total Projects</div></div>
+      <div class="port-stat"><div class="big orange">5</div><div class="sm">Power Electronics</div></div>
+      <div class="port-stat"><div class="big teal">3</div><div class="sm">IoT &amp; Sensors</div></div>
+      <div class="port-stat"><div class="big purple">4</div><div class="sm">Microcontrollers</div></div>
+      <div class="port-stat"><div class="big green2">1</div><div class="sm">Home Automation</div></div>
+    </div>
+
+    <!-- Filter -->
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="filterProjects('all',this)">⊞ All</button>
+      <button class="filter-btn" onclick="filterProjects('power',this)">⚡ Power Electronics 5</button>
+      <button class="filter-btn" onclick="filterProjects('iot',this)">📡 IoT &amp; Sensors 3</button>
+      <button class="filter-btn" onclick="filterProjects('mcu',this)">💻 Microcontrollers 4</button>
+      <button class="filter-btn" onclick="filterProjects('home',this)">🏠 Home Automation 1</button>
+    </div>
+
+    <!-- Projects Grid -->
+    <div class="projects-grid" id="projectsGrid">
+
+      <!-- 1 USB-C Li-Ion Charger -->
+      <div class="project-card" data-cat="power">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#1e3a5f,#1e40af)">
+          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="15" y="20" width="50" height="40" rx="4" fill="#1e3a5f" stroke="#3b82f6" stroke-width="1.5"/>
+            <rect x="20" y="25" width="40" height="30" rx="2" fill="#0f2744"/>
+            <text x="40" y="38" text-anchor="middle" fill="#3b82f6" font-size="7" font-family="monospace" font-weight="bold">TP4056</text>
+            <text x="40" y="46" text-anchor="middle" fill="#60a5fa" font-size="5" font-family="monospace">USB-C</text>
+            <rect x="35" y="55" width="10" height="6" rx="1" fill="#3b82f6"/>
+            <line x1="25" y1="45" x2="20" y2="45" stroke="#c0a060" stroke-width="1.5"/>
+            <line x1="55" y1="45" x2="60" y2="45" stroke="#c0a060" stroke-width="1.5"/>
+          </svg>
+          <div class="card-badges"><span class="layer-badge">2L</span><span class="status-badge">✓ Complete</span></div>
+        </div>
+        <div class="card-body">
+          <h3>USB-C Li-Ion Battery Charger</h3>
+          <div class="card-chip">TP4056</div>
+          <p>Compact USB-C Li-Ion single-cell charger with overcharge/discharge protection. JLCPCB-ready with full BOM.</p>
+          <div class="card-tags"><span class="ctag">USB-C</span><span class="ctag">Li-Ion</span><span class="ctag">Charging</span><span class="ctag">4-layer</span></div>
+          <div class="card-features"><span class="feat">USB-C PD negotiation</span><span class="feat">Overcharge protection</span><span class="feat">LED status indicators</span><span class="feat">Compact 30×20mm</span></div>
+        </div>
+      </div>
+
+      <!-- 2 Synchronous Buck Converter -->
+      <div class="project-card" data-cat="power">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#1a3a2a,#166534)">
+          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="20" y="25" width="40" height="30" rx="3" fill="#1a3a2a" stroke="#22c55e" stroke-width="1.5"/>
+            <text x="40" y="38" text-anchor="middle" fill="#22c55e" font-size="6" font-family="monospace" font-weight="bold">LM2596</text>
+            <text x="40" y="46" text-anchor="middle" fill="#4ade80" font-size="5" font-family="monospace">BUCK</text>
+            <path d="M15,40 L20,40 L25,30 L30,50 L35,40 L60,40" stroke="#22c55e" stroke-width="1.5" fill="none"/>
+            <circle cx="62" cy="40" r="3" fill="#22c55e"/>
+          </svg>
+          <div class="card-badges"><span class="layer-badge">2L</span><span class="status-badge">✓ Complete</span></div>
+        </div>
+        <div class="card-body">
+          <h3>Synchronous Buck Converter</h3>
+          <div class="card-chip">LM2596</div>
+          <p>High-efficiency buck converter for 3–40V input, adjustable 1.25–35V output at up to 3A continuous.</p>
+          <div class="card-tags"><span class="ctag">Buck</span><span class="ctag">Switching</span><span class="ctag">Efficiency</span><span class="ctag">Power</span></div>
+          <div class="card-features"><span class="feat">92% peak efficiency</span><span class="feat">Adjustable output</span><span class="feat">Thermal management</span><span class="feat">DFM verified</span></div>
+        </div>
+      </div>
+
+      <!-- 3 Boost Converter -->
+      <div class="project-card" data-cat="power">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#2d1a5f,#5b21b6)">
+          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="20" y="25" width="40" height="30" rx="3" fill="#2d1a5f" stroke="#a855f7" stroke-width="1.5"/>
+            <text x="40" y="38" text-anchor="middle" fill="#a855f7" font-size="6" font-family="monospace" font-weight="bold">MT3608</text>
+            <text x="40" y="46" text-anchor="middle" fill="#c084fc" font-size="5" font-family="monospace">BOOST</text>
+            <path d="M15,45 L20,45 L28,25 L36,45 L60,45" stroke="#a855f7" stroke-width="1.5" fill="none"/>
+          </svg>
+          <div class="card-badges"><span class="layer-badge">2L</span><span class="status-badge">✓ Complete</span></div>
+        </div>
+        <div class="card-body">
+          <h3>Boost Converter Module</h3>
+          <div class="card-chip">MT3608</div>
+          <p>Wide-input boost converter stepping up 2–24V to a stable 5V/USB output, ideal for battery-powered devices.</p>
+          <div class="card-tags"><span class="ctag">Boost</span><span class="ctag">5V</span><span class="ctag">USB</span><span class="ctag">Power</span></div>
+          <div class="card-features"><span class="feat">2–24V input range</span><span class="feat">USB-A output port</span><span class="feat">Short-circuit protection</span><span class="feat">Optimized layout</span></div>
+        </div>
+      </div>
+
+      <!-- 4 Solar MPPT -->
+      <div class="project-card" data-cat="power">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#1a3a1a,#15803d)">
+          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="40" cy="35" r="12" fill="#facc15" opacity="0.9"/>
+            <line x1="40" y1="17" x2="40" y2="22" stroke="#facc15" stroke-width="2"/>
+            <line x1="40" y1="48" x2="40" y2="53" stroke="#facc15" stroke-width="2"/>
+            <line x1="22" y1="35" x2="27" y2="35" stroke="#facc15" stroke-width="2"/>
+            <line x1="53" y1="35" x2="58" y2="35" stroke="#facc15" stroke-width="2"/>
+            <line x1="27" y1="22" x2="30" y2="25" stroke="#facc15" stroke-width="2"/>
+            <rect x="25" y="55" width="30" height="10" rx="2" fill="#15803d" stroke="#22c55e" stroke-width="1"/>
+            <text x="40" y="63" text-anchor="middle" fill="#4ade80" font-size="5" font-family="monospace">CN3791</text>
+          </svg>
+          <div class="card-badges"><span class="layer-badge">2L</span><span class="status-badge">✓ Complete</span></div>
+        </div>
+        <div class="card-body">
+          <h3>Solar MPPT Charger</h3>
+          <div class="card-chip">CN3791</div>
+          <p>MPPT solar charger for 12V lead-acid batteries. Designed for off-grid and renewable energy applications.</p>
+          <div class="card-tags"><span class="ctag">Solar</span><span class="ctag">MPPT</span><span class="ctag">Renewable</span><span class="ctag">12V</span></div>
+          <div class="card-features"><span class="feat">MPPT algorithm</span><span class="feat">12V lead-acid support</span><span class="feat">Reverse polarity protect</span><span class="feat">Status LED array</span></div>
+        </div>
+      </div>
+
+      <!-- 5 Battery Management System -->
+      <div class="project-card" data-cat="power">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#3a1a1a,#991b1b)">
+          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="18" y="28" width="44" height="24" rx="3" fill="#3a1a1a" stroke="#ef4444" stroke-width="1.5"/>
+            <rect x="22" y="32" width="36" height="16" rx="2" fill="#1a0a0a" opacity="0.8"/>
+            <text x="40" y="42" text-anchor="middle" fill="#ef4444" font-size="5.5" font-family="monospace" font-weight="bold">DW01A</text>
+            <text x="40" y="49" text-anchor="middle" fill="#fca5a5" font-size="4.5" font-family="monospace">+ FS8205A</text>
+            <rect x="62" y="33" width="5" height="14" rx="1" fill="#ef4444"/>
+          </svg>
+          <div class="card-badges"><span class="layer-badge">2L</span><span class="status-badge">✓ Complete</span></div>
+        </div>
+        <div class="card-body">
+          <h3>Battery Management System</h3>
+          <div class="card-chip">DW01A + FS8205A</div>
+          <p>3-cell series Li-Ion BMS with cell balancing, NTC temperature sensing, and 30A discharge rating.</p>
+          <div class="card-tags"><span class="ctag">BMS</span><span class="ctag">Li-Ion</span><span class="ctag">Safety</span><span class="ctag">3S</span></div>
+          <div class="card-features"><span class="feat">3-cell series</span><span class="feat">Cell balancing</span><span class="feat">30A discharge rated</span><span class="feat">NTC temp sensing</span></div>
+        </div>
+      </div>
+
+      <!-- 6 Environmental Sensor Breakout -->
+      <div class="project-card" data-cat="iot">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#3a1a3a,#7e22ce)">
+          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <line x1="20" y1="60" x2="20" y2="20" stroke="#c084fc" stroke-width="2"/>
+            <line x1="18" y1="60" x2="22" y2="60" stroke="#c084fc" stroke-width="1.5"/>
+            <circle cx="20" cy="55" r="2" fill="#ef4444"/>
+            <circle cx="20" cy="45" r="2" fill="#f97316"/>
+            <circle cx="20" cy="35" r="2" fill="#22c55e"/>
+            <rect x="30" y="25" width="30" height="30" rx="3" fill="#2d1a4a" stroke="#a855f7" stroke-width="1.5"/>
+            <text x="45" y="38" text-anchor="middle" fill="#a855f7" font-size="5" font-family="monospace">BME280</text>
+            <text x="45" y="46" text-anchor="middle" fill="#c084fc" font-size="4.5" font-family="monospace">MPU6050</text>
+          </svg>
+          <div class="card-badges"><span class="layer-badge">2L</span><span class="status-badge">✓ Complete</span></div>
+        </div>
+        <div class="card-body">
+          <h3>Environmental Sensor Breakout</h3>
+          <div class="card-chip">BME280 + MPU6050</div>
+          <p>Dual-sensor breakout combining BME280 (temp/humidity/pressure) and MPU6050 (6-axis IMU) on a single PCB.</p>
+          <div class="card-tags"><span class="ctag">BME280</span><span class="ctag">MPU6050</span><span class="ctag">I2C</span><span class="ctag">Sensor</span></div>
+          <div class="card-features"><span class="feat">Sub-µA sleep current</span><span class="feat">Compact design</span><span class="feat">I2C selectable address</span><span class="feat">3.3V/5V compatible</span></div>
+        </div>
+      </div>
+
+      <!-- 7 LoRa Sensor Node -->
+      <div class="project-card" data-cat="iot">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#1a3a3a,#0e7490)">
+          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M40,50 Q30,35 40,20 Q50,35 40,50" stroke="#06b6d4" stroke-width="1.5" fill="none"/>
+            <path d="M40,50 Q20,30 40,10 Q60,30 40,50" stroke="#06b6d4" stroke-width="1" fill="none" opacity="0.5"/>
+            <circle cx="40" cy="50" r="4" fill="#06b6d4"/>
+            <rect x="28" y="55" width="24" height="12" rx="2" fill="#0e7490" stroke="#06b6d4" stroke-width="1"/>
+            <text x="40" y="64" text-anchor="middle" fill="#67e8f9" font-size="5" font-family="monospace">RFM95</text>
+          </svg>
+          <div class="card-badges"><span class="layer-badge">2L</span><span class="status-badge">✓ Complete</span></div>
+        </div>
+        <div class="card-body">
+          <h3>LoRa Sensor Node</h3>
+          <div class="card-chip">ATmega328P + RFM95</div>
+          <p>Ultra-low-power LoRa sensor node for remote monitoring. Battery life of 5+ years on AA cells.</p>
+          <div class="card-tags"><span class="ctag">LoRa</span><span class="ctag">Node</span><span class="ctag">Low Power</span><span class="ctag">IoT</span></div>
+          <div class="card-features"><span class="feat">Sub-µA sleep current</span><span class="feat">RFM95 LoRa module</span><span class="feat">Solar charging option</span><span class="feat">Deep sleep &lt;10µA</span></div>
+        </div>
+      </div>
+
+      <!-- 8 LoRa GPS Tracker -->
+      <div class="project-card" data-cat="iot">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#1a2a3a,#1e40af)">
+          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M40,65 C40,65 25,48 25,37 C25,28.7 31.7,22 40,22 C48.3,22 55,28.7 55,37 C55,48 40,65 40,65 Z" fill="#1e40af" stroke="#3b82f6" stroke-width="1.5"/>
+            <circle cx="40" cy="37" r="6" fill="#3b82f6"/>
+            <circle cx="40" cy="37" r="3" fill="#fff" opacity="0.9"/>
+            <text x="40" y="17" text-anchor="middle" fill="#60a5fa" font-size="4.5" font-family="monospace">GPS+LoRa</text>
+          </svg>
+          <div class="card-badges"><span class="layer-badge">2L</span><span class="status-badge">✓ Complete</span></div>
+        </div>
+        <div class="card-body">
+          <h3>LoRa GPS Tracker</h3>
+          <div class="card-chip">ESP32 + SX1276</div>
+          <p>Long-range GPS asset tracker with LoRaWAN connectivity. Ideal for fleet and outdoor monitoring.</p>
+          <div class="card-tags"><span class="ctag">LoRa</span><span class="ctag">GPS</span><span class="ctag">Tracker</span><span class="ctag">IoT</span></div>
+          <div class="card-features"><span class="feat">15km LoRa range</span><span class="feat">GPS + GLONASS</span><span class="feat">Solar charging</span><span class="feat">Deep sleep &lt;10µA</span></div>
+        </div>
+      </div>
+
+      <!-- 9 STM32 Blue Pill Clone -->
+      <div class="project-card" data-cat="mcu">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#1a1a3a,#3730a3)">
+          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="20" y="25" width="40" height="30" rx="3" fill="#1a1a3a" stroke="#6366f1" stroke-width="1.5"/>
+            <text x="40" y="38" text-anchor="middle" fill="#6366f1" font-size="6" font-family="monospace" font-weight="bold">STM32</text>
+            <text x="40" y="47" text-anchor="middle" fill="#a5b4fc" font-size="4.5" font-family="monospace">F103C8T6</text>
+            <line x1="18" y1="28" x2="20" y2="28" stroke="#c0a060" stroke-width="1.5"/>
+            <line x1="18" y1="32" x2="20" y2="32" stroke="#c0a060" stroke-width="1.5"/>
+            <line x1="18" y1="36" x2="20" y2="36" stroke="#c0a060" stroke-width="1.5"/>
+            <line x1="18" y1="40" x2="20" y2="40" stroke="#c0a060" stroke-width="1.5"/>
+            <line x1="18" y1="44" x2="20" y2="44" stroke="#c0a060" stroke-width="1.5"/>
+            <line x1="18" y1="48" x2="20" y2="48" stroke="#c0a060" stroke-width="1.5"/>
+            <line x1="60" y1="28" x2="62" y2="28" stroke="#c0a060" stroke-width="1.5"/>
+            <line x1="60" y1="32" x2="62" y2="32" stroke="#c0a060" stroke-width="1.5"/>
+            <line x1="60" y1="36" x2="62" y2="36" stroke="#c0a060" stroke-width="1.5"/>
+            <line x1="60" y1="40" x2="62" y2="40" stroke="#c0a060" stroke-width="1.5"/>
+            <line x1="60" y1="44" x2="62" y2="44" stroke="#c0a060" stroke-width="1.5"/>
+            <line x1="60" y1="48" x2="62" y2="48" stroke="#c0a060" stroke-width="1.5"/>
+          </svg>
+          <div class="card-badges"><span class="layer-badge">2L</span><span class="status-badge">✓ Complete</span></div>
+        </div>
+        <div class="card-body">
+          <h3>STM32 Blue Pill Clone</h3>
+          <div class="card-chip">STM32F103C8T6</div>
+          <p>Improved Blue Pill clone with proper USB-C, larger decoupling, and fixed footprints. Drop-in replacement.</p>
+          <div class="card-tags"><span class="ctag">STM32</span><span class="ctag">ARM Cortex-M3</span><span class="ctag">Clone</span><span class="ctag">Dev Board</span></div>
+          <div class="card-features"><span class="feat">USB-C connector</span><span class="feat">Improved decoupling</span><span class="feat">Boot selector</span><span class="feat">SWD debug port</span></div>
+        </div>
+      </div>
+
+      <!-- 10 ESP8266 WiFi Board -->
+      <div class="project-card" data-cat="mcu">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#1a2a1a,#065f46)">
+          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M30,50 Q25,38 35,28 Q45,18 50,28 Q55,38 50,50" stroke="#10b981" stroke-width="1.5" fill="none"/>
+            <path d="M34,50 Q31,40 38,32 Q45,24 48,32 Q51,40 46,50" stroke="#34d399" stroke-width="1" fill="none" opacity="0.7"/>
+            <rect x="28" y="50" width="24" height="14" rx="2" fill="#065f46" stroke="#10b981" stroke-width="1"/>
+            <text x="40" y="59" text-anchor="middle" fill="#6ee7b7" font-size="5" font-family="monospace">ESP8266</text>
+            <text x="40" y="66" text-anchor="middle" fill="#34d399" font-size="4" font-family="monospace">WiFi</text>
+          </svg>
+          <div class="card-badges"><span class="layer-badge">2L</span><span class="status-badge">✓ Complete</span></div>
+        </div>
+        <div class="card-body">
+          <h3>ESP8266 WiFi Dev Board</h3>
+          <div class="card-chip">ESP8266EX</div>
+          <p>Compact ESP8266 development board with USB-C, auto-reset circuit, and onboard 3.3V regulator.</p>
+          <div class="card-tags"><span class="ctag">ESP8266</span><span class="ctag">WiFi</span><span class="ctag">IoT</span><span class="ctag">Dev Board</span></div>
+          <div class="card-features"><span class="feat">Auto-reset circuit</span><span class="feat">USB-C programming</span><span class="feat">3.3V LDO onboard</span><span class="feat">Arduino compatible</span></div>
+        </div>
+      </div>
+
+      <!-- 11 ATmega328P Custom Board -->
+      <div class="project-card" data-cat="mcu">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#2a1a1a,#92400e)">
+          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="22" y="22" width="36" height="36" rx="3" fill="#2a1a1a" stroke="#f97316" stroke-width="1.5"/>
+            <text x="40" y="37" text-anchor="middle" fill="#f97316" font-size="5.5" font-family="monospace" font-weight="bold">ATmega</text>
+            <text x="40" y="45" text-anchor="middle" fill="#fb923c" font-size="5" font-family="monospace">328P</text>
+            <line x1="20" y1="26" x2="22" y2="26" stroke="#c0a060" stroke-width="1.5"/>
+            <line x1="20" y1="30" x2="22" y2="30" stroke="#c0a060" stroke-width="1.5"/>
+            <line x1="20" y1="34" x2="22" y2="34" stroke="#c0a060" stroke-width="1.5"/>
+            <line x1="20" y1="38" x2="22" y2="38" stroke="#c0a060" stroke-width="1.5"/>
+            <line x1="20" y1="42" x2="22" y2="42" stroke="#c0a060" stroke-width="1.5"/>
+            <line x1="20" y1="46" x2="22" y2="46" stroke="#c0a060" stroke-width="1.5"/>
+            <line x1="20" y1="50" x2="22" y2="50" stroke="#c0a060" stroke-width="1.5"/>
+            <line x1="58" y1="26" x2="60" y2="26" stroke="#c0a060" stroke-width="1.5"/>
+            <line x1="58" y1="30" x2="60" y2="30" stroke="#c0a060" stroke-width="1.5"/>
+            <line x1="58" y1="34" x2="60" y2="34" stroke="#c0a060" stroke-width="1.5"/>
+            <line x1="58" y1="38" x2="60" y2="38" stroke="#c0a060" stroke-width="1.5"/>
+            <line x1="58" y1="42" x2="60" y2="42" stroke="#c0a060" stroke-width="1.5"/>
+          </svg>
+          <div class="card-badges"><span class="layer-badge">2L</span><span class="status-badge">✓ Complete</span></div>
+        </div>
+        <div class="card-body">
+          <h3>ATmega328P Custom Board</h3>
+          <div class="card-chip">ATmega328P</div>
+          <p>Standalone ATmega328P board with crystal oscillator, ICSP header, UART, and breadboard-friendly pinout.</p>
+          <div class="card-tags"><span class="ctag">ATmega</span><span class="ctag">Arduino</span><span class="ctag">Custom</span><span class="ctag">Standalone</span></div>
+          <div class="card-features"><span class="feat">Crystal oscillator</span><span class="feat">ICSP header</span><span class="feat">Breadboard friendly</span><span class="feat">5V & 3.3V rails</span></div>
+        </div>
+      </div>
+
+      <!-- 12 RP2040 Dev Board -->
+      <div class="project-card" data-cat="mcu">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#1a1a2a,#4c1d95)">
+          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="22" y="22" width="36" height="36" rx="3" fill="#1a1a2a" stroke="#8b5cf6" stroke-width="1.5"/>
+            <circle cx="40" cy="40" r="10" fill="#2d1a5f" stroke="#8b5cf6" stroke-width="1"/>
+            <text x="40" y="37" text-anchor="middle" fill="#8b5cf6" font-size="5" font-family="monospace" font-weight="bold">RP2040</text>
+            <text x="40" y="45" text-anchor="middle" fill="#c4b5fd" font-size="4" font-family="monospace">Dual ARM</text>
+            <circle cx="26" cy="26" r="2" fill="#8b5cf6" opacity="0.6"/>
+            <circle cx="54" cy="26" r="2" fill="#8b5cf6" opacity="0.6"/>
+          </svg>
+          <div class="card-badges"><span class="layer-badge">4L</span><span class="status-badge">✓ Complete</span></div>
+        </div>
+        <div class="card-body">
+          <h3>RP2040 Minimal Dev Board</h3>
+          <div class="card-chip">RP2040</div>
+          <p>Minimal RP2040 board with USB-C, 4MB flash, SWD debug, and clean GPIO breakout. 4-layer design.</p>
+          <div class="card-tags"><span class="ctag">RP2040</span><span class="ctag">Raspberry Pi</span><span class="ctag">Dual Core</span><span class="ctag">4-Layer</span></div>
+          <div class="card-features"><span class="feat">4MB QSPI flash</span><span class="feat">USB-C native</span><span class="feat">SWD debug port</span><span class="feat">26 GPIO pins</span></div>
+        </div>
+      </div>
+
+      <!-- 13 4-Channel Relay -->
+      <div class="project-card" data-cat="home">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#2a1a1a,#b45309)">
+          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="30" width="14" height="20" rx="2" fill="#2a1a1a" stroke="#f59e0b" stroke-width="1.2"/>
+            <rect x="28" y="30" width="14" height="20" rx="2" fill="#2a1a1a" stroke="#f59e0b" stroke-width="1.2"/>
+            <rect x="46" y="30" width="14" height="20" rx="2" fill="#2a1a1a" stroke="#f59e0b" stroke-width="1.2"/>
+            <rect x="64" y="30" width="6" height="20" rx="2" fill="#1a1a1a" stroke="#64748b" stroke-width="1"/>
+            <text x="17" y="43" text-anchor="middle" fill="#f59e0b" font-size="5" font-family="monospace">CH1</text>
+            <text x="35" y="43" text-anchor="middle" fill="#f59e0b" font-size="5" font-family="monospace">CH2</text>
+            <text x="53" y="43" text-anchor="middle" fill="#f59e0b" font-size="5" font-family="monospace">CH3</text>
+            <circle cx="17" cy="58" r="3" fill="#22c55e" opacity="0.8"/>
+            <circle cx="35" cy="58" r="3" fill="#22c55e" opacity="0.8"/>
+            <circle cx="53" cy="58" r="3" fill="#ef4444" opacity="0.8"/>
+            <text x="40" y="22" text-anchor="middle" fill="#fbbf24" font-size="5.5" font-family="monospace">4-CH RELAY</text>
+          </svg>
+          <div class="card-badges"><span class="layer-badge">2L</span><span class="status-badge">✓ Complete</span></div>
+        </div>
+        <div class="card-body">
+          <h3>4-Channel Relay Board</h3>
+          <div class="card-chip">HLK-PM01</div>
+          <p>230V AC compatible 4-channel relay board with optocoupler isolation, safe for direct mains switching.</p>
+          <div class="card-tags"><span class="ctag">Relay</span><span class="ctag">230V</span><span class="ctag">AC</span><span class="ctag">Home Auto</span></div>
+          <div class="card-features"><span class="feat">4-channel relay</span><span class="feat">Optocoupler isolated</span><span class="feat">230V AC compatible</span><span class="feat">Safety design</span></div>
+        </div>
+      </div>
+
+    </div><!-- /projects-grid -->
+
+    <!-- Want Similar CTA -->
+    <div class="want-similar">
+      <div class="container">
+        <div style="font-size:2rem;margin-bottom:.75rem">⚡</div>
+        <h3>Want a Similar Project?</h3>
+        <p>Let's discuss your requirements and create a production-ready PCB.</p>
+        <a href="#contact" class="btn-primary" style="display:inline-flex">Start a Project →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CONTACT INFORMATION ═══ -->
+<section id="contact" style="padding:0">
+  <div class="contact-hero">
+    <div class="container">
+      <div class="contact-icon">
+        <svg width="28" height="28" fill="none" stroke="#3b82f6" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <h1>Get In Touch</h1>
+      <p>Have a PCB project in mind? Let's discuss your requirements. I respond within 24 hours to all inquiries.</p>
+      <div class="contact-pills">
+        <span class="cpill">⏰ Response within 24h</span>
+        <span class="cpill">🌍 Worldwide availability</span>
+        <span class="cpill">⚡ 2–3 day delivery</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="contact-body">
+    <div class="container">
+      <div class="contact-grid">
+        <!-- Left: Channels -->
+        <div class="channels">
+          <h3>Contact Channels</h3>
+          <p>Choose the platform that suits you best. I'm available on all channels.</p>
+          <div class="channel-cards">
+            <a href="mailto:kvabhishek908@gmail.com" class="ch-card">
+              <div class="ch-icon mail">✉️</div>
+              <div class="ch-info">
+                <div class="label">Email</div>
+                <div class="val">kvabhishek908@gmail.com</div>
+                <div class="hint">Best for detailed project briefs</div>
+              </div>
+            </a>
+            <a href="https://github.com/Abhi90808" target="_blank" rel="noopener" class="ch-card">
+              <div class="ch-icon github">⚙️</div>
+              <div class="ch-info">
+                <div class="label">GitHub</div>
+                <div class="val">github.com/Abhi90808</div>
+                <div class="hint">View my open-source designs</div>
+              </div>
+            </a>
+            <a href="https://www.fiverr.com/abhishek_k_v" target="_blank" rel="noopener" class="ch-card">
+              <div class="ch-icon fiverr">🟢</div>
+              <div class="ch-info">
+                <div class="label">Fiverr</div>
+                <div class="val">@abhishek_k_v</div>
+                <div class="hint">Order directly on Fiverr</div>
+              </div>
+            </a>
+          </div>
+
+          <!-- Availability Card -->
+          <div class="avail-card">
+            <div class="avail-header"><span class="green-dot"></span> Currently Available</div>
+            <p style="font-size:.85rem;color:var(--gray);margin-bottom:1rem;line-height:1.6">I'm open to new freelance projects. Reach out and I'll confirm availability for your timeline.</p>
+            <div class="avail-grid">
+              <div class="avail-row">Delivery: <strong>2–3 Business Days</strong></div>
+              <div class="avail-row">Response: <strong>Within 24 Hours</strong></div>
+              <div class="avail-row">Availability: <strong>Worldwide</strong></div>
+              <div class="avail-row">Platform: <strong>Fiverr / Direct</strong></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Form -->
+        <div class="form-card">
+          <h3>Send a Message</h3>
+          <p class="form-sub">Your message goes directly to <strong>kvabhishek908@gmail.com</strong>. I'll reply within 24 hours.</p>
+          <form id="contactForm">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="fname">Your Name *</label>
+                <input type="text" id="fname" name="name" placeholder="John Doe" required>
+              </div>
+              <div class="form-group">
+                <label for="femail">Email Address *</label>
+                <input type="email" id="femail" name="email" placeholder="you@example.com" required>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="fcat">Project Category</label>
+                <select id="fcat" name="category">
+                  <option value="">Select a category</option>
+                  <option>Power Electronics</option>
+                  <option>IoT & Sensors</option>
+                  <option>Microcontrollers</option>
+                  <option>Home Automation</option>
+                  <option>Custom / Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="fsubject">Subject *</label>
+                <input type="text" id="fsubject" name="subject" placeholder="PCB design for my project" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="fmsg">Project Details *</label>
+              <textarea id="fmsg" name="message" placeholder="Describe your project: requirements, board dimensions, layer count, components, special features, timeline..." required></textarea>
+            </div>
+            <!-- Hidden Formspree redirect field -->
+            <input type="hidden" name="_subject" value="New PCB Project Inquiry – AKV PCB Designs">
+            <button type="submit" class="form-submit" id="submitBtn">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              Send Message
+            </button>
+            <p class="form-note">Your message is sent directly to my inbox. I don't share your information.</p>
+            <div class="form-success" id="formSuccess">
+              <h4>✅ Message Sent Successfully!</h4>
+              <p>Thanks for reaching out! I'll reply to <span id="replyEmail"></span> within 24 hours.</p>
+            </div>
+            <div class="form-error" id="formError">
+              Something went wrong. Please email me directly at kvabhishek908@gmail.com
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Band -->
+<div class="cta-band">
+  <div class="container">
+    <div class="icon">🔌</div>
+    <h2>Start Your PCB Project Today</h2>
+    <p>From idea to production-ready Gerbers — let's make your electronics project a reality.</p>
+    <a href="mailto:kvabhishek908@gmail.com" class="btn-primary" style="display:inline-flex">Email Me Directly →</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#home" class="logo" style="margin-bottom:.75rem;display:inline-flex">
+          <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="white" stroke-width="2"/><circle cx="8" cy="8" r="1.5" fill="white"/><circle cx="16" cy="8" r="1.5" fill="white"/><circle cx="8" cy="16" r="1.5" fill="white"/><circle cx="16" cy="16" r="1.5" fill="white"/><line x1="8" y1="8" x2="16" y2="8" stroke="white" stroke-width="1.5"/><line x1="8" y1="8" x2="8" y2="16" stroke="white" stroke-width="1.5"/><line x1="16" y1="8" x2="16" y2="16" stroke="white" stroke-width="1.5"/><line x1="8" y1="16" x2="16" y2="16" stroke="white" stroke-width="1.5"/><circle cx="12" cy="12" r="1.5" fill="#22c55e"/></svg></div>
+          <span class="logo-text" style="color:white">AKV<span> PCB Designs</span></span>
+        </a>
+        <p>Precision PCB design for power electronics, IoT, and embedded systems. From schematic to production-ready Gerbers.</p>
+        <div class="footer-socials">
+          <a href="mailto:kvabhishek908@gmail.com" class="fsocial" title="Email">✉️</a>
+          <a href="https://github.com/Abhi90808" target="_blank" class="fsocial" title="GitHub">⚙️</a>
+          <a href="https://www.fiverr.com/abhishek_k_v" target="_blank" class="fsocial" title="Fiverr">🟢</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#profile">Profile</a></li>
+          <li><a href="#services">My Services</a></li>
+          <li><a href="#portfolio">Portfolio</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Skills</h4>
+        <div class="skill-pills">
+          <span class="skill-pill">KiCad</span>
+          <span class="skill-pill">PCB Layout</span>
+          <span class="skill-pill">Schematic Design</span>
+          <span class="skill-pill">Gerber Export</span>
+          <span class="skill-pill">DFM</span>
+          <span class="skill-pill">BOM</span>
+          <span class="skill-pill">ESP8266</span>
+          <span class="skill-pill">STM32</span>
+          <span class="skill-pill">ATmega</span>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Contact</h4>
+        <div class="contact-quick">
+          <div class="cq-item">
+            <svg width="14" height="14" fill="none" stroke="#3b82f6" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            kvabhishek908@gmail.com
+          </div>
+          <div class="cq-item">
+            <svg width="14" height="14" fill="none" stroke="#f97316" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            2–3 day turnaround
+          </div>
+          <div class="cq-item">
+            <svg width="14" height="14" fill="none" stroke="#22c55e" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Fiverr: @abhishek_k_v
+          </div>
+        </div>
+        <div class="avail-pill"><span class="green-dot"></span> Available for projects worldwide</div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2024 Abhishek K V. All rights reserved.</p>
+      <p>PCB Designer &amp; Electronics Engineer</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Mobile menu
+function toggleMenu(){
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+function closeMenu(){
+  document.getElementById('mobileMenu').classList.remove('open');
+}
+
+// Nav active state on scroll
+const sections = ['home','profile','services','portfolio','contact'];
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if(el && window.scrollY >= el.offsetTop - 80) current = id;
+  });
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+});
+
+// Portfolio filter
+function filterProjects(cat, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.project-card').forEach(card => {
+    card.style.display = (cat === 'all' || card.dataset.cat === cat) ? 'block' : 'none';
+  });
+}
+
+// Formspree contact form
+document.getElementById('contactForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submitBtn');
+  const email = document.getElementById('femail').value;
+  btn.textContent = 'Sending…';
+  btn.disabled = true;
+  try {
+    const res = await fetch('https://formspree.io/f/mjgjgqep', {
+      method: 'POST',
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: document.getElementById('fname').value,
+        email: email,
+        category: document.getElementById('fcat').value,
+        subject: document.getElementById('fsubject').value,
+        message: document.getElementById('fmsg').value,
+        _subject: 'New PCB Project Inquiry – AKV PCB Designs'
+      })
+    });
+    if(res.ok) {
+      document.getElementById('replyEmail').textContent = email;
+      document.getElementById('formSuccess').style.display = 'block';
+      document.getElementById('formError').style.display = 'none';
+      this.reset();
+      btn.textContent = '✓ Sent!';
+      btn.style.background = 'var(--green)';
+    } else {
+      throw new Error('Failed');
+    }
+  } catch {
+    document.getElementById('formError').style.display = 'block';
+    document.getElementById('formSuccess').style.display = 'none';
+    btn.textContent = 'Send Message';
+    btn.disabled = false;
+    btn.style.background = '';
+  }
+});
+
+// Animate skill bars on scroll into view
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting) {
+      e.target.querySelectorAll('.bar-fill').forEach(b => {
+        b.style.width = b.style.width; // trigger reflow
+      });
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.skills-panel').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
